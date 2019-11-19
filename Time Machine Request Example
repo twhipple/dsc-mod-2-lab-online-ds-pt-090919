@@ -1,0 +1,100 @@
+Time Machine Request
+          https://api.darksky.net/forecast/[key]/[latitude],[longitude],[time]
+        
+A Time Machine Request returns the observed (in the past) or forecasted (in the future) hour-by-hour weather and daily weather conditions for a particular date. A Time Machine request is identical in structure to a Forecast Request, except:
+
+The currently data point will refer to the time provided, rather than the current time.
+The minutely data block will be omitted, unless you are requesting a time within an hour of the present.
+The hourly data block will contain data points starting at midnight (local time) of the day requested, and continuing until midnight (local time) of the following day.
+The daily data block will contain a single data point referring to the requested date.
+The alerts data block will be omitted.
+
+Example Request
+      GET https://api.darksky.net/forecast/0123456789abcdef9876543210fedcba/42.3601,-71.0589,255657600?exclude=currently,flags
+      
+      {
+        "latitude": 42.3601,
+        "longitude": -71.0589,
+        "timezone": "America/New_York",
+        "hourly": {
+          "summary": "Snow (6–9 in.) and windy starting in the afternoon.",
+          "icon": "snow",
+          "data": [
+            {
+              "time": 255589200,
+              "summary": "Mostly Cloudy",
+              "icon": "partly-cloudy-night",
+              "precipIntensity": 0,
+              "precipProbability": 0,
+              "temperature": 22.8,
+              "apparentTemperature": 16.46,
+              "dewPoint": 15.51,
+              "humidity": 0.73,
+              "pressure": 1026.78,
+              "windSpeed": 4.83,
+              "windBearing": 354,
+              "cloudCover": 0.78,
+              "uvIndex": 0,
+              "visibility": 9.62
+            },
+            ...
+          ]
+        },
+        "daily": {
+          "data": [
+            {
+              "time": 255589200,
+              "summary": "Snow (9–14 in.) and windy starting in the afternoon.",
+              "icon": "snow",
+              "sunriseTime": 255613996,
+              "sunsetTime": 255650764,
+              "moonPhase": 0.97,
+              "precipIntensity": 0.0354,
+              "precipIntensityMax": 0.1731,
+              "precipIntensityMaxTime": 255657600,
+              "precipProbability": 1,
+              "precipAccumulation": 7.337,
+              "precipType": "snow",
+              "temperatureHigh": 31.84,
+              "temperatureHighTime": 255632400,
+              "temperatureLow": 28.63,
+              "temperatureLowTime": 255697200,
+              "apparentTemperatureHigh": 20.47,
+              "apparentTemperatureHighTime": 255625200,
+              "apparentTemperatureLow": 13.03,
+              "apparentTemperatureLowTime": 255697200,
+              "dewPoint": 24.72,
+              "humidity": 0.86,
+              "pressure": 1016.41,
+              "windSpeed": 22.93,
+              "windBearing": 56,
+              "cloudCover": 0.95,
+              "uvIndex": 1,
+              "uvIndexTime": 255621600,
+              "visibility": 4.83,
+              "temperatureMin": 22.72,
+              "temperatureMinTime": 255596400,
+              "temperatureMax": 32.04,
+              "temperatureMaxTime": 255672000,
+              "apparentTemperatureMin": 11.13,
+              "apparentTemperatureMinTime": 255650400,
+              "apparentTemperatureMax": 20.47,
+              "apparentTemperatureMaxTime": 255625200
+            }
+          ]
+        },
+        "offset": -5
+      }
+          
+          
+Request Parameters
+Required parameters slot directly into the request URL. Optional parameters should be specified as HTTP query parameters.
+
+key required
+Your Dark Sky secret key. (Your secret key must be kept secret; in particular, do not embed it in JavaScript source code that you transmit to clients.)
+latitude required
+The latitude of a location (in decimal degrees). Positive is north, negative is south.
+longitude required
+The longitude of a location (in decimal degrees). Positive is east, negative is west.
+time required
+Either be a UNIX time (that is, seconds since midnight GMT on 1 Jan 1970) or a string formatted as follows: [YYYY]-[MM]-[DD]T[HH]:[MM]:[SS][timezone]. timezone should either be omitted (to refer to local time for the location being requested), Z (referring to GMT time), or +[HH][MM] or -[HH][MM] for an offset from GMT in hours and minutes. The timezone is only used for determining the time of the request; the response will always be relative to the local time zone.
